@@ -625,10 +625,34 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  // Simple form handling (in production, this would send to a backend)
+  // Simple form handling with better UX
   document.querySelector('.contact-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    alert('Thank you for your message! We will get back to you soon.');
-    (e.target as HTMLFormElement).reset();
+    const form = e.target as HTMLFormElement;
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    
+    // Disable button and show loading state
+    const originalText = button.textContent;
+    button.textContent = 'Sending...';
+    button.disabled = true;
+    
+    // Simulate form submission (in production, this would send to a backend)
+    setTimeout(() => {
+      // Create success message
+      const successMsg = document.createElement('div');
+      successMsg.style.cssText = 'background: #10b981; color: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; text-align: center;';
+      successMsg.textContent = 'Thank you for your message! We will get back to you soon.';
+      
+      // Insert message and reset form
+      form.appendChild(successMsg);
+      form.reset();
+      
+      // Reset button
+      button.textContent = originalText;
+      button.disabled = false;
+      
+      // Remove message after 5 seconds
+      setTimeout(() => successMsg.remove(), 5000);
+    }, 1000);
   });
 </script>
